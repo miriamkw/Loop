@@ -40,3 +40,5 @@
 /* The text for the Watch button for enabling workout mode */
 "Workout" = "Trening";
 
+/* HUD row title for time of last bolus */
+"Last Bolus" = "Forrige Bolus";

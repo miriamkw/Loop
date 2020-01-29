@@ -17,6 +17,7 @@ import os.log
 final class ChartHUDController: HUDInterfaceController, WKCrownDelegate {
     private enum TableRow: Int, CaseIterable {
         case iob
+        case lastBolus
         case cob
         case netBasal
         case reservoirVolume
@@ -25,6 +26,8 @@ final class ChartHUDController: HUDInterfaceController, WKCrownDelegate {
             switch self {
             case .iob:
                 return NSLocalizedString("Active Insulin", comment: "HUD row title for IOB")
+            case .lastBolus:
+                return NSLocalizedString("Last Bolus", comment: "HUD row title for time of last bolus")
             case .cob:
                 return NSLocalizedString("Active Carbs", comment: "HUD row title for COB")
             case .netBasal:
@@ -159,6 +162,16 @@ final class ChartHUDController: HUDInterfaceController, WKCrownDelegate {
         guard let activeContext = loopManager.activeContext else {
             return
         }
+        
+        var doseEntries: [DoseEntry]?
+        loopManager.doseStore.getNormalizedDoseEntries(start: Date()) { (result) -> Void in
+            switch result {
+            case .failure(let error):
+                self.log.error("DoseStore failed to get normalized dose entries: %{public}@", String(describing: error))
+            case .success(let doses):
+                doseEntries = doses
+            }
+        }
 
         for row in TableRow.allCases {
             let cell = table.rowController(at: row.rawValue) as! HUDRowController
@@ -171,6 +184,8 @@ final class ChartHUDController: HUDInterfaceController, WKCrownDelegate {
             switch row {
             case .iob:
                 cell.setActiveInsulin(activeContext.activeInsulin)
+            case .lastBolus:
+                cell.setLastBolus(doseEntries)
             case .cob:
                 cell.setActiveCarbohydrates(activeContext.activeCarbohydrates)
             case .netBasal:

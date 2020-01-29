@@ -106,7 +106,8 @@ class StatusViewController: UIViewController, NCWidgetProviding {
 
         self.charts.prerender()
         glucoseChartContentView.chartGenerator = { [weak self] (frame) in
-            return self?.charts.chart(atIndex: 0, frame: frame)?.view
+            return
+                self?.charts.chart(atIndex: 0, frame: frame)?.view
         }
 
         extensionContext?.widgetLargestAvailableDisplayMode = .expanded
@@ -136,7 +137,7 @@ class StatusViewController: UIViewController, NCWidgetProviding {
 
         switch activeDisplayMode {
         case .expanded:
-            preferredContentSize = CGSize(width: maxSize.width, height: compactHeight + 100)
+            preferredContentSize = CGSize(width: maxSize.width, height: compactHeight + 120)
         case .compact:
             fallthrough
         @unknown default:

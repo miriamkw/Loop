@@ -52,6 +52,16 @@ extension HUDRowController {
 
         setDetail(insulinFormatter.string(from: activeInsulin, for: .internationalUnit()))
     }
+    
+    func setLastBolus(_ doseEntries: [DoseEntry]?) {
+        guard let doseEntries = doseEntries else {
+            setDetail(nil)
+            return
+        }
+        
+        //setDetail("14:30, 3.4 U")
+        setDetail(doseEntries.first?.description)
+    }
 
     func setActiveCarbohydrates(_ activeCarbohydrates: HKQuantity?) {
         guard let activeCarbohydrates = activeCarbohydrates else {
@@ -64,6 +74,58 @@ extension HUDRowController {
 
         setDetail(carbFormatter.string(from: activeCarbohydrates, for: .gram()))
     }
+    /*
+    func setDoseEntries(_ doseEntries: [DoseEntry]) {
+        let dateFormatter = DateFormatter(timeStyle: .short)
+        let doseFormatter = NumberFormatter.dose
+
+        var basalDosePoints = [ChartPoint]()
+        var bolusDosePoints = [ChartPoint]()
+        var allDosePoints = [ChartPoint]()
+
+        for entry in doseEntries {
+            let time = entry.endDate.timeIntervalSince(entry.startDate)
+
+            if entry.type == .bolus && entry.netBasalUnits > 0 {
+                let x = ChartAxisValueDate(date: entry.startDate, formatter: dateFormatter)
+                let y = ChartAxisValueDoubleLog(actualDouble: entry.unitsInDeliverableIncrements, unitString: "U", formatter: doseFormatter)
+
+                let point = ChartPoint(x: x, y: y)
+                bolusDosePoints.append(point)
+                allDosePoints.append(point)
+            } else if time > 0 {
+                // TODO: Display the DateInterval
+                let startX = ChartAxisValueDate(date: entry.startDate, formatter: dateFormatter)
+                let endX = ChartAxisValueDate(date: entry.endDate, formatter: dateFormatter)
+                let zero = ChartAxisValueInt(0)
+                let rate = entry.netBasalUnitsPerHour
+                let value = ChartAxisValueDoubleLog(actualDouble: rate, unitString: "U/hour", formatter: doseFormatter)
+
+                let valuePoints: [ChartPoint]
+
+                if abs(rate) > .ulpOfOne {
+                    valuePoints = [
+                        ChartPoint(x: startX, y: value),
+                        ChartPoint(x: endX, y: value)
+                    ]
+                } else {
+                    valuePoints = []
+                }
+
+                basalDosePoints += [
+                    ChartPoint(x: startX, y: zero)
+                ] + valuePoints + [
+                    ChartPoint(x: endX, y: zero)
+                ]
+
+                allDosePoints += valuePoints
+            }
+        }
+
+        self.basalDosePoints = basalDosePoints
+        self.bolusDosePoints = bolusDosePoints
+        self.allDosePoints = allDosePoints
+    }*/
 
     func setNetTempBasalDose(_ tempBasal: Double?) {
         guard let tempBasal = tempBasal else {
@@ -81,7 +143,7 @@ extension HUDRowController {
             "U/hr",
             comment: "The short unit display string for international units of insulin delivery per hour"
         )
-
+        
         setDetail(basalFormatter.string(from: tempBasal, unit: unit))
     }
 

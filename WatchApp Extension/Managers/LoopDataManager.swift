@@ -17,6 +17,8 @@ class LoopDataManager {
     let carbStore: CarbStore
 
     let glucoseStore: GlucoseStore
+    
+    let doseStore: DoseStore
 
     var healthStore: HKHealthStore {
         return glucoseStore.healthStore
@@ -65,6 +67,13 @@ class LoopDataManager {
             cacheStore: cacheStore,
             cacheLength: .hours(4)
         )
+        doseStore = DoseStore(
+            healthStore: healthStore,
+            cacheStore: cacheStore,
+            observationEnabled: false,
+            insulinModel: UserDefaults.appGroup?.insulinModelSettings?.model,
+            basalProfile: UserDefaults.appGroup?.basalRateSchedule,
+            insulinSensitivitySchedule: UserDefaults.appGroup?.insulinSensitivitySchedule)
     }
 }
 

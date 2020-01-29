@@ -36,3 +36,6 @@
 
 /* The text for the Watch button for enabling workout mode */
 "Workout" = "Workout";
+
+/* HUD row title for time of last bolus */
+"Last Bolus" = "Last Bolus";

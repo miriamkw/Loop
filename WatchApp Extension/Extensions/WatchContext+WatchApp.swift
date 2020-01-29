@@ -42,4 +42,13 @@ extension WatchContext {
 
         return HKQuantity(unit: .internationalUnit(), doubleValue: value)
     }
+    /*
+    var lastBolus: DoseEntry? {
+        // HVOR SKAL DEN HENTE VALUE FRA???
+        guard let value = reservoir else {
+            return nil
+        }
+
+        return DoseEntry(unit: .internationalUnit(), doubleValue: value)
+    }*/
 }
