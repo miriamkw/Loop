@@ -1,4 +1,4 @@
-github "LoopKit/LoopKit" ~> 3.0
+github "miriamkw/LoopKit" "master"
 github "LoopKit/CGMBLEKit" ~> 3.2
 github "i-schuetz/SwiftCharts" == 0.6.5
 github "miriamkw/dexcom-share-client-swift" "master"
